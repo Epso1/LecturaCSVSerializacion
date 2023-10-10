@@ -14,7 +14,7 @@ public class MainClass {
 
     public static void main(String[] args) {
         DecimalFormat df = new DecimalFormat("#.00");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         MainClass mc = new MainClass();
 
         //Lee un archivo csv de Funkos y devuelve un ArrayList<Funko>
@@ -22,7 +22,7 @@ public class MainClass {
 
         //Funko más caro
         System.out.println("El Funko más caro es: ");
-        mc.funkoMasCaro(funkos).mostrarInfo();
+        mc.mostrarInfo(mc.funkoMasCaro(funkos));;
 
         //Media de precio de Funkos
         System.out.println("El precio medio de los Funkos es: " + df.format(mc.precioMedio(funkos)) + " €");
@@ -32,8 +32,7 @@ public class MainClass {
         mc.agrupadosPorModelo(funkos).forEach((modelo, lista) -> {
             System.out.println("Modelo: " + modelo);
             for (Funko funko : lista) {
-                System.out.println(funko.getCod() + funko.getNombre() + funko.getModelo() + df.format(funko.getPrecio()) + dtf.format(funko.getFechaLanzamiento()) );
-
+                mc.mostrarInfo(funko);
             }
         });
 
@@ -44,8 +43,9 @@ public class MainClass {
 
         //Funkos lanzados en 2023
         System.out.println("Funkos lanzados en 2023:");
-        mc.lanzadosEn2023(funkos).stream().forEach(Funko::mostrarInfo);
-
+        for(Funko f : mc.lanzadosEn2023(funkos)){
+            mc.mostrarInfo(f);
+        }
 
 
         //Serializa los objetos del ArrayList al archivo "funkos.dat"
@@ -176,13 +176,14 @@ public class MainClass {
         try {
             FileInputStream archivo = new FileInputStream(archivoOrigen);
             ObjectInputStream entrada = new ObjectInputStream(archivo);
+            MainClass mc = new MainClass();
 
             ArrayList<Funko> listaFunkos = (ArrayList<Funko>) entrada.readObject();
 
             System.out.println("Mostrando Funkos deserializados:");
             for (Funko f : listaFunkos
             ) {
-                f.mostrarInfo();
+                mc.mostrarInfo(f);
             }
 
             entrada.close();
@@ -193,6 +194,17 @@ public class MainClass {
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("* ERROR: No se ha podido realizar la lectura desde el archivo. *");
         }
+    }
+
+    public void mostrarInfo(Funko funko) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        System.out.print("Cod: " + funko.getCod() + ", ");
+        System.out.print("Nombre: " + funko.getNombre() + ", ");
+        System.out.print("Modelo: " + funko.getModelo()+ ", ");
+        System.out.print("Precio: " + df.format(funko.getPrecio()) + " € , ");
+        System.out.println("Fecha de lanzamiento: " + dtf.format(funko.getFechaLanzamiento()));
     }
 
 
