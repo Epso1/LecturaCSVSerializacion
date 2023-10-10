@@ -4,6 +4,7 @@ package lecturaCSV;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ public class MainClass {
 
     public static void main(String[] args) {
         DecimalFormat df = new DecimalFormat("#.00");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         MainClass mc = new MainClass();
 
         //Lee un archivo csv de Funkos y devuelve un ArrayList<Funko>
@@ -23,14 +25,15 @@ public class MainClass {
         mc.funkoMasCaro(funkos).mostrarInfo();
 
         //Media de precio de Funkos
-        System.out.println("El precio medio de los Funkos es: " + df.format(mc.precioMedio(funkos)));
+        System.out.println("El precio medio de los Funkos es: " + df.format(mc.precioMedio(funkos)) + " €");
 
         //Funkos agrupados por modelos
         System.out.println("Funkos agrupados por modelo:");
         mc.agrupadosPorModelo(funkos).forEach((modelo, lista) -> {
             System.out.println("Modelo: " + modelo);
             for (Funko funko : lista) {
-                funko.mostrarInfo();
+                System.out.println(funko.getCod() + funko.getNombre() + funko.getModelo() + df.format(funko.getPrecio()) + dtf.format(funko.getFechaLanzamiento()) );
+
             }
         });
 
