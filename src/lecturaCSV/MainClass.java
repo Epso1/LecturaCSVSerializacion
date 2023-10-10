@@ -196,6 +196,10 @@ public class MainClass {
         }
     }
 
+    /**
+     * Método que muestra los datos de un Funko en formato Euros y fecha española
+     * @param funko
+     */
     public void mostrarInfo(Funko funko) {
         DecimalFormat df = new DecimalFormat("#.00");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
